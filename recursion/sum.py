@@ -1,4 +1,6 @@
-
+"""
+Sum list elements using recursive function sumElements(lst)
+"""
 def sumElements(lst):
   if len(lst)==1:
     return lst[0]
