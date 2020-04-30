@@ -6,4 +6,4 @@ For example f(y(x)), means first y function is applied to x and then the outcome
 
 ## Examples
 
-Calculating percentage is result of 2 functions: dividing and then mutliplying outcode by 100.
+Calculating percentage is result of 2 functions: dividing and then mutliplying it by 100.
