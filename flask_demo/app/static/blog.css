@@ -1,0 +1,32 @@
+.blog-post{
+  padding: 1rem;
+  border: 1px solid var(--color-light-3,#999);
+  border-radius: 2px;
+  margin-bottom: 1rem;
+}
+
+
+.blog-post h2{
+  color: var(--color-dark-1,#000);
+}
+
+.blog-header{
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-accent,orange);
+  font-size: 1.4rem;
+}
+
+.blog-body{
+  display:flex;
+}
+
+.data-time{
+  color: var(--color-dark-1,#333);
+  font-size: 1rem;
+}
+
+.blog-content{
+  padding: 1rem 0rem;
+  color: var(--color-dark-1,#333);
+}

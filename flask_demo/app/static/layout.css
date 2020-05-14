@@ -1,0 +1,38 @@
+html{
+  /** FONT size and relative sizes calculation using rem
+  we want to enable user to set the fontsize but we also need
+  easy way to calculate out rem units. To achieve both the following
+  approach is advised. Default font size is 16px. So setting font size
+  to 100% we now that our starting size for 1rem = 16px. It would be easer
+  for us if we can set start to 10px so we can easily use decimals in rem,
+  for example 10px = 1rem => 1.65rem = 16.5px. To achive easy math we
+  can set font size to 10/16 = 62.5%. Note! when changing font size
+  the complete layout will change because all dimensions are set
+  in rem units.
+  */
+  /*estimated 16px=1rem;*/
+  font-size: 100%;
+
+  @media screen and (max-width:var(--breakpoint-md,'600px')){
+    font-size: 75%;
+  }
+
+  @media screen and (max-width:var(--breakpoint-sm,'480px')){
+    font-size: 50%;
+  }
+}
+
+body{
+  min-height: 100vh;
+  display: grid;
+  /* header - main - footer*/
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 1rem;
+}
+
+footer{
+  padding:1rem;
+  color: var(--color-light-0,#fff);
+  background-color: var(--color-dark-1,#333);
+}
+

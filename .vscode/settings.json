@@ -12,5 +12,6 @@
     "-p",
     "unittest_*.py"
   ],
-  "python.testing.nosetestsEnabled": false
+  "python.testing.nosetestsEnabled": false,
+  "python.pythonPath": ".venv/bin/python"
 }

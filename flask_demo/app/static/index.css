@@ -1,0 +1,12 @@
+
+@import 'variables.css';
+
+@import 'layout.css';
+
+@import 'blog.css';
+
+.avatar-small{
+  min-width: 9rem;
+  height: 9rem;
+  margin: 1rem;
+}

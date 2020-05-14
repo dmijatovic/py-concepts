@@ -1,0 +1,12 @@
+{
+  "name": "flask_demo",
+  "version": "1.0.0",
+  "description": "Flask is basic web server in python",
+  "main": "index.js",
+  "scripts": {
+    "start": "python run.py"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

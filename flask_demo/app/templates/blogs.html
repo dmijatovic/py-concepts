@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+  {% for post in posts.items %}
+    <section class="blog-post">
+      <h2>
+        <a href="{{url_for('blogs_view', id=post.id)}}" class="article-title">
+          {{post.title}}
+        </a>
+      </h2>
+      <div class="blog-header">
+        <span class="user-name">
+          {{post.author.username}}
+        </span>
+        <span class="data-time">
+          {{post.createdAt.strftime('%Y-%d-%m at %H:%m')}}
+        </span>
+      </div>
+      <div class="blog-body">
+        <img src="{{url_for('static',filename='profiles/' + post.author.picture)}}" alt="" class="rounded-circle article-img avatar-small">
+        <div class="blog-content">
+          {{post.content}}
+        </div>
+      </div>
+    </section>
+  {% endfor %}
+  {% for page_num in posts.iter_pages() %}
+    {% if page_num %}
+      {% if posts.page == page_num %}
+        <a href="{{url_for('blogs',page=page_num)}}"
+          class="btn btn-info mb-4">{{ page_num }}
+        </a>
+      {% else %}
+      <a href="{{url_for('blogs',page=page_num)}}"
+        class="btn btn-outline-info mb-4">{{ page_num }}
+      </a>
+      {% endif %}
+    {% else %}
+      ...
+    {% endif %}
+  {% endfor %}
+{% endblock content %}

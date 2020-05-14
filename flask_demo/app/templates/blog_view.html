@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="blog-post">
+  <h2>{{post.title}}</h2>
+  <div class="blog-header">
+    <span class="user-name">
+      {{post.author.username}}
+    </span>
+    <span class="data-time">
+      {{post.createdAt.strftime('%Y-%d-%m at %H:%m')}}
+    </span>
+    <span>
+      <a href="{{url_for('blogs_edit',id=post.id)}}"
+        class="btn btn-primary">Edit</a>
+      <a href="{{url_for('blogs_delete',id=post.id)}}"
+        class="btn btn-danger">Delete</a>
+    </span>
+  </div>
+  <div class="blog-body">
+    <img src="{{url_for('static',filename='profiles/' + post.author.picture)}}" alt="" class="rounded-circle article-img avatar-small">
+    <div class="blog-content">
+      {{post.content}}
+    </div>
+  </div>
+</section>
+{% endblock content %}

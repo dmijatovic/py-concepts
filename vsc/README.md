@@ -40,17 +40,59 @@ which python3
 
 ## Virtual environments
 
-You can create virtual env for each project. In fact that is advised approach for larger projects to keep python version locked.
-On linux you need to install venv module for python 3
+It is good practice for larger projects to use local project environments. Using virtual env you ensure the package versions used in the project are locked (similar to package.lock file). In python there are 3 major ways to do this.
+
+- Standard venv package. This is the latest one and it is baked standard into pyhon. It requires python 3.3 or higher. You do not have to install anythin. NOTE! after creating venv you use `python` and `pip` commands even if you normally use `python3` and `pip3` as default commands on your machine to activate python v3. Standard venv package does not support loading various python versions than the standard ones you have on your machine. If you need virtual environement with specific python version (not your default versions) you need to use package `virtualenv` (see point 2). For detailed walk trough see this [instruction video](https://www.youtube.com/watch?v=Kg1Yvry_Ydk)
 
 ```bash
-# install
-apt-get install python3-venv
-# setup virtual environment for this project with the name venv
-python3 -m venv venv
+# list all
+pip3 list
+# create virtual environment at the current folder
+python3 -m venv p36env
+# activate p36env - it will show
+source p36env/bin/activate
+# validate python version
+which python
+# list packages in selected env
+pip list
+# install required packages
+pip install flask
+# create requirements file
+pip freeze
+# create requirements file from global env
+pip3 freeze --local > requirements.txt
+# install requirements
+pip install -r requirements.txt
+# deactivate virtual environment
+decativate
 ```
 
-After creating venv for the project you need to selected in VSC to be used. At the bottom taskbar python runtimes can be selected. Use the one with the name you specified, in my case the name is venv.
+Note you might need to install wheel package if you get error during installation of other packages: "Failed building wheel for wrapt".
+
+```bash
+# solves Failed building wheel for wrapt error at package install
+pip install wheel
+```
+
+- virtualenv: older package that was quite popular before venv module is introduced. See this [instruction video](https://www.youtube.com/watch?v=N5vscPTWKOk) for more info.
+
+```bash
+# install virtualenv
+pip3 install virtualenv
+# list all global packages
+pip3 list
+```
+
+### Create requirements file
+
+On an existing project you can extract libraries used in the project to a requirements.txt file.
+
+```bash
+# save dependencies in the requirements file
+pip3 freeze --local > requirements.txt
+# install dependencies
+pip3 install -r requirements.txt
+```
 
 ## PIP with Linux
 
