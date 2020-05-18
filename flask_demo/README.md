@@ -660,3 +660,220 @@ next_page = request.args.get('next')
 ## Debugging Flask using browser
 
 When flask is in development mode detailed information about error will be provided to user. It is even possible to run and debug code from the browser using debuggin PIN!
+
+## Flask app deployment
+
+The deployment is based on [this video](https://www.youtube.com/watch?v=goToXTC96Co) from the same author who created this flask demo.
+
+The video deploys on linux machine (Ubuntu 18.10) in the cloud. I will describe how machine is setup here.
+
+- ssh into a Ubuntu server.
+- setup ssh
+
+```bash
+# update
+sudo apt update
+# set hostname to flask-server
+hostnamectl set-hostname flask-server
+# check hostname
+hostname
+# save hostname with proper ip in hosts file
+nano /etc/hosts
+# 192.168.1.12 flask-server
+# create new user with privileges
+adduser dmijatovic
+# create password
+# other info is optional
+# add user to sudo group
+adduser dmijatovic sudo
+# logout and log back in as dmijatovic user
+# ssh into machine with new user
+ssh dmijatovic@192.168.1.12
+# setup ssh key based authtication
+# more info https://www.youtube.com/watch?v=vpk_1gldOAE
+# withing user home create .ssh folder
+mkdir .ssh
+# on YOUR LOCAL MACHINE
+# create and copy your ssh key to server
+ssh-keygen -b 4096
+# leave on default and empty pass frase
+# keys are created id_rsa and id_rsa.pub
+# move your public key to server
+# secure copy from machine to server to home directory
+scp ~/.ssh/id_rsa.pub dmijatovic@192.168.1.7:~/.ssh/authorized_keys
+# update permissions on the server for .ssh folder
+sudo chmod 700 ~/.ssh
+# all files should have different mode (see link for more info)
+sudo chmod 600 ~/.ssh/*
+# disable root login via ssh in ssh config file on server
+sudo nano /etc/ssh/sshd_config
+# PermitRootLogin yes -> no
+# PasswordAuthentication yes -> no
+# save and restart ssh server
+sudo systemctl restart sshd
+```
+
+- setup firewall
+
+```bash
+# install uncomplicated firewall
+sudo apt install ufw
+# allow outgoing transport
+sudo ufw default allow outgoing
+# deny incoming traffic
+sudo ufw default deny incoming
+# set specifi allowance: ssh, http, https
+sudo ufw allow ssh
+# allow incoming traffic port 5000
+sudo ufw allow 5000
+# later we will allow http port 80 and https 443
+sudo ufw allow http/tcp
+# enable firewall
+sudo ufw enable
+# view status - which port are open/closed
+sudo ufw status
+```
+
+- deploy Flask app: you can clone, or FTP it. or bash copy it
+
+```bash
+# first create dependecies from your venv in the project folder
+pip freeze > requirements.txt
+# upload you flask project to server:users home folder
+scp -r ./flask_demo dmijatovic@192.168.1.7:~/
+# confirm app folder is on server
+ls -lha # in your homefolder
+# install python3-pip
+sudo apt install python3-pip
+# install virutal environemnt
+sudo apt install python3-venv
+# create virtual environment in the project flask_demo
+python3 -m venv ~/flask_demo/venv
+# confirm venv folder is created
+# activate venv
+source venv/bin/activate
+# confirm venv is activated
+# install requirements
+pip install -r requirements.txt
+# set env variables in your project in config file
+sudo touch /etc/config.json
+# edit file with variables
+sudo nano /etc/config.json
+# {
+#   "SECRET_KEY":"ASDASDASDASDASDdfgeysrtyrty",
+#    ... ETC...
+# }
+```
+
+```python
+# adjust you config.py file to load config.json env variables
+import json
+with open('/etc/config.json') as config_file:
+  config = json.load(config_file)
+
+# all env variables are now in config object
+SECRET_KEY = config.get('SECRET_KEY')
+```
+
+- test application on port 5000
+
+- make application avaliable with nginx and ...
+
+```bash
+# install nginx
+sudo apt install nginx
+# install gunicorn use venv and pip
+pip install gunicorn
+# update nginx config and instruct it to use gunicorn for python
+# remove nginx default config
+sudo rm /etc/nginx/sites-enabled/default
+# create new config
+sudo nano /etc/nginx/sites-enabled/flaskblog
+```
+
+Edit nginx config file
+
+```nginx
+server{
+  listen 80;
+  server_name 192.168.1.7;
+
+  #static files
+  location /static{
+    # location to static folder on the server
+    alias /home/dmijatovic/flask_demo/app/static;
+  }
+  # other traffic to gunicorn (default on port 8000)
+  location /{
+    proxy_pass http://localhost:8000;
+    include /etc/nginx/proxy_params;
+    proxy_redirect off;
+  }
+
+}
+```
+
+Additional setup firewal
+
+```bash
+# allow http port 80 and https 443
+sudo ufw allow http/tcp
+
+# remove allowed rule of 5000 (it was only for testing)
+sudo ufw delete allow 5000
+
+# restart nginx to load new config
+sudo systemctl restart nginx
+
+# start gunicorn with 3 workers
+# advice on #workers 2 x #cores + 1
+# gunicorn -w 3 run:app
+
+# define gunicorn to supervise
+sudo apt install supervisor
+# setup supervisor - create new config file
+sudo nano /etc/supervisor/conf.d/flask_demo.conf
+#
+```
+
+Content of supervisor config file
+
+```conf
+[program:flaskdemo]
+directory:/home/dmijatovic/flask_demo
+command=/home/dmijatovic/flask_demo/venv/bin/gunicorn -w 3 run:app
+user=dmijatovic
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stderr_logfile=/var/log/flask_demo/flask_demo.err.log
+stdout_logfile=/var/log/flask_demo/flask_demo.out.log
+```
+
+- create logfile
+
+```bash
+# create dir for logfiles
+sudo mkdir -p /var/log/flask_demo
+# create log files
+sudo touch /var/log/flask_demo/flask_demo.err.log
+sudo touch /var/log/flask_demo/flask_demo.out.log
+# restart superviser
+sudo supervisorctl reload
+```
+
+- Nginx max size of files to upload
+
+```bash
+# open basic config file of nginx
+sudo nano /etc/nginx/nginx.conf
+
+# find the key types_hash_max_size
+# below set additional allowance
+client_max_body_size 5M;
+# save config file
+
+# resart nginx
+sudo systemctl restart nginx
+```
