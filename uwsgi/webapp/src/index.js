@@ -7,16 +7,16 @@ app.innerHTML=`
 
 fetch("api")
   .then(res=>{
-    debugger
+    // debugger
     console.log(res)
     return res.json()
   })
   .then(data=>{
-    debugger 
+    // debugger
     app.innerHTML=`<pre>${JSON.stringify(data)}</pre>`
   })
   .catch(e=>{
-    debugger
+    // debugger
     console.error(e)
     app.innerHTML!=`FAILED! ${JSON.stringify(e)}`
   })
