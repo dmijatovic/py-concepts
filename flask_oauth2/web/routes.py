@@ -4,6 +4,9 @@ from flask import jsonify, request, make_response
 from web import app
 from functools import wraps
 
+ALGO = app.config['JWT_ALGO']
+KEY = app.config['SECRET_KEY']
+
 def protected_route(fn):
   @wraps(fn)
   def decorated(*args,**kwargs):
@@ -12,7 +15,7 @@ def protected_route(fn):
     if not token:
       return jsonify({'message':'Token is missing'}), 401
     try:
-      data = jwt.decode(token, app.config['SECRET_KEY'])
+      data = jwt.decode(token, KEY, algorithms=[ALGO])
     except:
       return jsonify({'message':'Token is NOT VALID!'}), 403
 
@@ -44,7 +47,7 @@ def login():
   if auth and auth.password == 'password':
     expTime = datetime.utcnow() + timedelta(seconds=30)
     # encode jwt (payload as {} and secret)
-    token = jwt.encode({'user': auth.username,'exp': expTime}, app.config['SECRET_KEY'])
+    token = jwt.encode({'user': auth.username,'exp': expTime}, KEY, algorithm=ALGO)
     # token is in byte format and need to be decoded
     return jsonify({'token': token.decode('UTF-8')})
   # if not correct return standard login form
