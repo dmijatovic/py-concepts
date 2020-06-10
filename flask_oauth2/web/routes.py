@@ -49,7 +49,9 @@ def login():
     # encode jwt (payload as {} and secret)
     token = jwt.encode({'user': auth.username,'exp': expTime}, KEY, algorithm=ALGO)
     # token is in byte format and need to be decoded
-    return jsonify({'token': token.decode('UTF-8')})
+    decoded = token.decode('UTF-8')
+    # print("Token...", decoded)
+    return {'token': decoded}, 200
   # if not correct return standard login form
   return make_response("Could not verify", 401,\
     {"WWW-authenticate":"Basic realm = 'Login required'"})

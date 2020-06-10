@@ -44,20 +44,23 @@ def test_login_jwt(jwt):
   resp = client.get("/login",headers=headers)
   jwt.encode.assert_called_once()
 
-@mock.patch('web.routes.jsonify')
-@mock.patch('web.routes.jwt')
-def test_login_jwt_jsonify(jwt, jsonify):
+@mock.patch('web.routes.jwt.encode')
+def test_login_jwt_jsonify(encode):
   # note the order is bottom-up
   cred = b64encode(b"test_user:password").decode('utf-8')
   headers={
     "Authorization": f"Basic {cred}"
   }
   resp = client.get("/login",headers=headers)
-  # jwt.encode.assert_called_once()
-  jwt.encode.return_value=bytes("FAKE_TOKEN",'UTF-8')
+  #jwt.encode.assert_called_once()
+  fake_token = bytes("FAKE_TOKEN",'UTF-8')
+  # jwt.encode = mock()
+  encode.return_value = fake_token
+  # jwt.encode.return_value="FAKE_TOKEN"
   # jsonify.assert_called_once_with({"token":"FAKE_TOKEN"})
-  jwt.encode.assert_called_once()
-  jsonify.assert_called_once()
+  encode.assert_called_once()
+  # assert resp.status_code == 200
+
 
 def test_protected_missing_token():
   resp = client.get("/protected")
