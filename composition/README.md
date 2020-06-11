@@ -7,3 +7,7 @@ For example f(y(x)), means first y function is applied to x and then the outcome
 ## Examples
 
 Calculating percentage is result of 2 functions: dividing and then mutliplying it by 100.
+
+## Composition with classes
+
+From the python training I encountered composition paradigm for the classes. See withclasses.py for composing the classes.
