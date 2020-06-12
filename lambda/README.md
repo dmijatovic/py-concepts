@@ -32,3 +32,19 @@ cur1 = list(map(lambda x: x['code'].upper(), items))
 print("cur1...", cur1)
 
 ```
+
+## List comprehension vs. builtin map and filter functions
+
+Map and filter functions are very popular in JavaScript land. However with python a similair results are achieved using lambda functions and list comprehensions. For an example see below
+
+```python
+def filterList(values, checkFn):
+  # list comprehension function with if conditional
+  return [val for val in values if checkFn(val)]
+
+my_list = [1, 2, 3, 4, 5]
+# return only items < 5
+filtered_list = filterList(my_list, lambda x: x < 5)
+print(filtered_list)
+
+```
