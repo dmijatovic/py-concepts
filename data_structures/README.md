@@ -15,4 +15,4 @@ Simple queue implementation can be done with list of classes. See queue.py
 
 ## Stack
 
-Stack approach is LIFO: last-in-first-out.
+Stack approach is LIFO: last-in-first-out. This implementation also uses list. To reverse item order I used reverse method of the list.
