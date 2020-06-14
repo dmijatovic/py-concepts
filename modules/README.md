@@ -80,3 +80,15 @@ Linux and Mac OS: edit yout local bash profile file ~/.bash_profile
 `/.bashrc and ~/.bash_profile are scripts that might be executed when bash is invoked. The ~/.bashrc file gets executed when you run bash using an interactive shell that is not a login shell.`
 
 So basically bashrc is run when you run an interactive shell that you're not logged in for and bash_profile is executed when you are a logged in user.
+
+## Relative imports
+
+Relative import is the one that can from current folder where the file is in it ONLY if there is a folder defined in the path. This approach is rearly used because it requires that file is present in the path (and this is not the case if you run the file directly).
+
+```python
+# use . for relative import
+# NOTE! this will not work if you run file directly
+from .currentFolder import file
+# import file from parent
+from ..parentFolder import file
+```
