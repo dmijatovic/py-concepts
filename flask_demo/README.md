@@ -123,9 +123,7 @@ Composing template sections is possible with Jinja2. Mental model is demonstrate
 <!-- section from home.html template -->
 {% block content %}
 <h1>Page content title</h1>
-<div>
-  This is body of the home page template
-</div>
+<div>This is body of the home page template</div>
 {% endblock content %}
 ```
 
@@ -301,6 +299,8 @@ It is good practice for larger projects to use local project environments. Using
 - Standard venv package. This is the latest one and it is baked standard into pyhon. It requires python 3.3 or higher. You do not have to install anythin. NOTE! after creating venv you use `python` and `pip` commands even if you normally use `python3` and `pip3` as default commands on your machine to activate python v3. Standard venv package does not support loading various python versions than the standard ones you have on your machine. If you need virtual environement with specific python version (not your default versions) you need to use package `virtualenv` (see point 2). For detailed walk trough see this [instruction video](https://www.youtube.com/watch?v=Kg1Yvry_Ydk)
 
 ```bash
+# you might need to install it on some linux distros
+apt install python3.8-venv
 # list all
 pip3 list
 # create virtual environment at the current folder

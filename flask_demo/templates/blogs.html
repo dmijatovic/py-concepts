@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+  {% for post in posts %}
+    <section class="blog-post">
+      <h2>{{post.title}}</h2>
+      <h3>{{post.author}}</h3>
+      <div>
+        {{post.content}}
+      </div>
+    </section>
+  {% endfor %}
+{% endblock content %}

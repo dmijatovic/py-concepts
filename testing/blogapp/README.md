@@ -4,4 +4,4 @@ This section is based on [Udemy python traning about unittest](https://www.udemy
 
 I did decided to use pytest as assertion library instead of unittest used on the training.
 
-## Testing dict
+The original code from this training is [avaliable here](https://github.com/schoolofcode-me/testing-python-apps).
